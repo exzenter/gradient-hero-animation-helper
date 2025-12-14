@@ -3,7 +3,7 @@
  * Plugin Name: Gradient Frontend Scroll
  * Plugin URI: https://github.com/exzenter/gradient-hero
  * Description: A floating settings menu for controlling Hero Gradient animation settings live on the frontend.
- * Version: 1.0.0
+ * Version: 1.2.0
  * Author: Exzenter
  * Author URI: https://github.com/exzenter
  * License: GPL-2.0+
@@ -41,14 +41,14 @@ class GradientFrontendScroll {
             'gradient-frontend-scroll-style',
             plugin_dir_url(__FILE__) . 'assets/css/floating-menu.css',
             array(),
-            '1.1.0'
+            '1.2.0'
         );
         
         wp_enqueue_script(
             'gradient-frontend-scroll-script',
             plugin_dir_url(__FILE__) . 'assets/js/floating-menu.js',
             array(),
-            '1.1.0',
+            '1.2.0',
             true
         );
         
@@ -56,7 +56,7 @@ class GradientFrontendScroll {
             'gradient-frontend-scroll-panel',
             plugin_dir_url(__FILE__) . 'assets/js/scroll-panel.js',
             array(),
-            '1.1.0',
+            '1.2.0',
             true
         );
     }

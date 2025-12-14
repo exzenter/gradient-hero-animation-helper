@@ -107,6 +107,38 @@ if (!defined('ABSPATH')) {
                         <option value="drawing">Drawing</option>
                     </select>
                 </div>
+                
+                <div class="gfs-control-group">
+                    <label class="gfs-label">Movement Mode</label>
+                    <select class="gfs-select" data-setting="movementMode">
+                        <option value="orbit">Orbit</option>
+                        <option value="wave">Wave</option>
+                        <option value="pulse">Pulse</option>
+                        <option value="drift">Drift</option>
+                        <option value="bounce">Bounce</option>
+                        <option value="spiral">Spiral</option>
+                        <option value="sway">Sway</option>
+                        <option value="chaos">Chaos</option>
+                        <option value="figure-eight">Figure Eight</option>
+                        <option value="vertical-wave">Vertical Wave</option>
+                    </select>
+                </div>
+                
+                <div class="gfs-control-group">
+                    <label class="gfs-label">Amplitude X (%)</label>
+                    <div class="gfs-range-wrapper">
+                        <input type="range" class="gfs-range" data-setting="amplitudeX" min="0" max="100" step="1" value="10">
+                        <span class="gfs-range-value">10</span>
+                    </div>
+                </div>
+                
+                <div class="gfs-control-group">
+                    <label class="gfs-label">Amplitude Y (%)</label>
+                    <div class="gfs-range-wrapper">
+                        <input type="range" class="gfs-range" data-setting="amplitudeY" min="0" max="100" step="1" value="15">
+                        <span class="gfs-range-value">15</span>
+                    </div>
+                </div>
             </div>
             
             <!-- Colors Section -->

@@ -3,7 +3,7 @@ Contributors: exzenter
 Tags: gradient, animation, frontend, settings, control panel, scroll animation
 Requires at least: 5.0
 Tested up to: 6.4
-Stable tag: 1.1.0
+Stable tag: 1.2.0
 Requires PHP: 7.4
 License: GPLv2 or later
 License URI: https://www.gnu.org/licenses/gpl-2.0.html
@@ -22,7 +22,12 @@ Gradient Frontend Scroll adds floating control panels to the frontend of your Wo
 * **Modern UI** - Glassmorphism-styled interface with smooth animations
 * **Admin Only** - Only visible to administrators
 
-**NEW in v1.1.0 - Scroll Animation Panel:**
+**NEW in v1.2.0 - Movement Patterns:**
+
+* **10 Movement Modes** - Choose from Orbit, Wave, Pulse, Drift, Bounce, Spiral, Sway, Chaos, Figure Eight, and Vertical Wave
+* **Amplitude Controls** - Fine-tune horizontal and vertical movement range
+
+**v1.1.0 - Scroll Animation Panel:**
 
 * **Live Scroll Counter** - Real-time display of current scroll position in pixels
 * **Scroll Keyframes** - Configure animation settings at specific scroll positions
@@ -33,6 +38,7 @@ Gradient Frontend Scroll adds floating control panels to the frontend of your Wo
 
 Animation & Movement:
 * Speed, Gradient Count, Position X/Y, Scale, Size Multiplier, Size Mode
+* Movement Mode (10 patterns), Amplitude X/Y
 
 Colors:
 * Color Mode (Hue Range / Palette)
@@ -96,6 +102,11 @@ Click "Export Code" in the scroll panel, then copy the generated JavaScript. Add
 
 == Changelog ==
 
+= 1.2.0 =
+* NEW: Movement Pattern settings with 10 different animation modes
+* NEW: Movement modes include Orbit, Wave, Pulse, Drift, Bounce, Spiral, Sway, Chaos, Figure Eight, and Vertical Wave
+* NEW: Amplitude X/Y controls for horizontal and vertical movement range
+
 = 1.1.0 =
 * NEW: Scroll Animation Panel (bottom-left)
 * NEW: Live scroll position counter
@@ -112,6 +123,9 @@ Click "Export Code" in the scroll panel, then copy the generated JavaScript. Add
 * Modern glassmorphism design
 
 == Upgrade Notice ==
+
+= 1.2.0 =
+New movement pattern settings with 10 animation modes and amplitude controls!
 
 = 1.1.0 =
 New scroll animation panel with keyframe support and export functionality!
