@@ -1,0 +1,971 @@
+/**
+ * Gradient Frontend Scroll - Floating Menu Styles
+ * 
+ * A modern, glassmorphism-styled floating control panel
+ */
+
+/* CSS Variables */
+:root {
+    --gfs-primary: #6366f1;
+    --gfs-primary-hover: #4f46e5;
+    --gfs-primary-glow: rgba(99, 102, 241, 0.4);
+    --gfs-bg: rgba(15, 15, 25, 0.92);
+    --gfs-bg-solid: #0f0f19;
+    --gfs-surface: rgba(30, 30, 45, 0.8);
+    --gfs-surface-hover: rgba(45, 45, 65, 0.9);
+    --gfs-border: rgba(99, 102, 241, 0.2);
+    --gfs-border-bright: rgba(99, 102, 241, 0.4);
+    --gfs-text: #f1f1f7;
+    --gfs-text-muted: #9ca3af;
+    --gfs-success: #10b981;
+    --gfs-warning: #f59e0b;
+    --gfs-error: #ef4444;
+    --gfs-radius: 12px;
+    --gfs-radius-sm: 6px;
+    --gfs-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.5), 0 0 50px rgba(99, 102, 241, 0.1);
+    --gfs-transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+/* Main Container */
+.gfs-floating-menu {
+    position: fixed;
+    bottom: 20px;
+    right: 20px;
+    z-index: 999999;
+    font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+    font-size: 13px;
+    color: var(--gfs-text);
+    line-height: 1.5;
+}
+
+.gfs-floating-menu * {
+    box-sizing: border-box;
+}
+
+/* Toggle Button */
+.gfs-toggle-btn {
+    width: 56px;
+    height: 56px;
+    border-radius: 50%;
+    border: 2px solid var(--gfs-border-bright);
+    background: var(--gfs-bg);
+    backdrop-filter: blur(20px);
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    transition: var(--gfs-transition);
+    box-shadow: var(--gfs-shadow);
+    position: absolute;
+    bottom: 0;
+    right: 0;
+}
+
+.gfs-toggle-btn:hover {
+    transform: scale(1.1);
+    border-color: var(--gfs-primary);
+    box-shadow: var(--gfs-shadow), 0 0 20px var(--gfs-primary-glow);
+}
+
+.gfs-toggle-btn .gfs-icon {
+    width: 24px;
+    height: 24px;
+    color: var(--gfs-primary);
+    transition: var(--gfs-transition);
+}
+
+.gfs-toggle-btn:hover .gfs-icon {
+    transform: rotate(90deg);
+}
+
+/* Panel */
+.gfs-panel {
+    position: absolute;
+    bottom: 70px;
+    right: 0;
+    width: 340px;
+    max-height: calc(100vh - 120px);
+    background: var(--gfs-bg);
+    backdrop-filter: blur(20px);
+    border: 1px solid var(--gfs-border);
+    border-radius: var(--gfs-radius);
+    box-shadow: var(--gfs-shadow);
+    overflow: hidden;
+    transition: var(--gfs-transition);
+    opacity: 1;
+    transform: translateY(0) scale(1);
+}
+
+.gfs-collapsed .gfs-panel {
+    opacity: 0;
+    transform: translateY(20px) scale(0.95);
+    pointer-events: none;
+}
+
+/* Header */
+.gfs-header {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 16px 16px 12px;
+    border-bottom: 1px solid var(--gfs-border);
+    background: linear-gradient(135deg, rgba(99, 102, 241, 0.1), transparent);
+}
+
+.gfs-title {
+    margin: 0;
+    font-size: 15px;
+    font-weight: 600;
+    background: linear-gradient(135deg, var(--gfs-text), var(--gfs-primary));
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
+}
+
+.gfs-header-actions {
+    display: flex;
+    gap: 8px;
+}
+
+/* Status */
+.gfs-status {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    padding: 10px 16px;
+    background: var(--gfs-surface);
+    font-size: 12px;
+}
+
+.gfs-status-dot {
+    width: 8px;
+    height: 8px;
+    border-radius: 50%;
+    background: var(--gfs-warning);
+    animation: gfs-pulse 2s infinite;
+}
+
+.gfs-status.connected .gfs-status-dot {
+    background: var(--gfs-success);
+    animation: none;
+}
+
+.gfs-status.error .gfs-status-dot {
+    background: var(--gfs-error);
+    animation: none;
+}
+
+@keyframes gfs-pulse {
+
+    0%,
+    100% {
+        opacity: 1;
+    }
+
+    50% {
+        opacity: 0.4;
+    }
+}
+
+/* Tabs */
+.gfs-tabs {
+    display: flex;
+    padding: 8px 8px 0;
+    gap: 4px;
+    border-bottom: 1px solid var(--gfs-border);
+    overflow-x: auto;
+}
+
+.gfs-tab {
+    flex: 1;
+    padding: 8px 12px;
+    background: transparent;
+    border: none;
+    border-bottom: 2px solid transparent;
+    color: var(--gfs-text-muted);
+    font-size: 12px;
+    font-weight: 500;
+    cursor: pointer;
+    transition: var(--gfs-transition);
+    white-space: nowrap;
+}
+
+.gfs-tab:hover {
+    color: var(--gfs-text);
+    background: var(--gfs-surface);
+}
+
+.gfs-tab.active {
+    color: var(--gfs-primary);
+    border-bottom-color: var(--gfs-primary);
+}
+
+/* Sections */
+.gfs-sections {
+    max-height: 400px;
+    overflow-y: auto;
+    scrollbar-width: thin;
+    scrollbar-color: var(--gfs-primary) var(--gfs-surface);
+}
+
+.gfs-sections::-webkit-scrollbar {
+    width: 6px;
+}
+
+.gfs-sections::-webkit-scrollbar-track {
+    background: var(--gfs-surface);
+}
+
+.gfs-sections::-webkit-scrollbar-thumb {
+    background: var(--gfs-primary);
+    border-radius: 3px;
+}
+
+.gfs-section {
+    display: none;
+    padding: 16px;
+}
+
+.gfs-section.active {
+    display: block;
+}
+
+.gfs-subsection {
+    padding: 12px;
+    margin: 8px 0;
+    background: var(--gfs-surface);
+    border-radius: var(--gfs-radius-sm);
+    border: 1px solid var(--gfs-border);
+}
+
+.gfs-subsection.hidden {
+    display: none;
+}
+
+/* Control Groups */
+.gfs-control-group {
+    margin-bottom: 14px;
+}
+
+.gfs-control-group:last-child {
+    margin-bottom: 0;
+}
+
+.gfs-label {
+    display: block;
+    margin-bottom: 6px;
+    font-size: 11px;
+    font-weight: 500;
+    color: var(--gfs-text-muted);
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+}
+
+/* Range Inputs */
+.gfs-range-wrapper {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+}
+
+.gfs-range {
+    flex: 1;
+    height: 6px;
+    border-radius: 3px;
+    background: var(--gfs-surface);
+    -webkit-appearance: none;
+    appearance: none;
+    cursor: pointer;
+}
+
+.gfs-range::-webkit-slider-thumb {
+    -webkit-appearance: none;
+    width: 16px;
+    height: 16px;
+    border-radius: 50%;
+    background: var(--gfs-primary);
+    border: 2px solid var(--gfs-bg-solid);
+    cursor: pointer;
+    box-shadow: 0 2px 8px rgba(99, 102, 241, 0.4);
+    transition: var(--gfs-transition);
+}
+
+.gfs-range::-webkit-slider-thumb:hover {
+    transform: scale(1.2);
+    box-shadow: 0 2px 12px rgba(99, 102, 241, 0.6);
+}
+
+.gfs-range::-moz-range-thumb {
+    width: 16px;
+    height: 16px;
+    border-radius: 50%;
+    background: var(--gfs-primary);
+    border: 2px solid var(--gfs-bg-solid);
+    cursor: pointer;
+}
+
+.gfs-range-value {
+    min-width: 45px;
+    padding: 4px 8px;
+    background: var(--gfs-surface);
+    border-radius: var(--gfs-radius-sm);
+    font-size: 11px;
+    font-weight: 600;
+    color: var(--gfs-primary);
+    text-align: center;
+    font-family: 'JetBrains Mono', 'Fira Code', monospace;
+}
+
+/* Hue Range - Special gradient styling */
+.gfs-hue-range {
+    background: linear-gradient(to right,
+            hsl(0, 100%, 50%),
+            hsl(60, 100%, 50%),
+            hsl(120, 100%, 50%),
+            hsl(180, 100%, 50%),
+            hsl(240, 100%, 50%),
+            hsl(300, 100%, 50%),
+            hsl(360, 100%, 50%));
+}
+
+/* Select Inputs */
+.gfs-select {
+    width: 100%;
+    padding: 10px 12px;
+    background: var(--gfs-surface);
+    border: 1px solid var(--gfs-border);
+    border-radius: var(--gfs-radius-sm);
+    color: var(--gfs-text);
+    font-size: 13px;
+    cursor: pointer;
+    transition: var(--gfs-transition);
+}
+
+.gfs-select:hover {
+    border-color: var(--gfs-border-bright);
+}
+
+.gfs-select:focus {
+    outline: none;
+    border-color: var(--gfs-primary);
+    box-shadow: 0 0 0 3px var(--gfs-primary-glow);
+}
+
+.gfs-select option {
+    background: var(--gfs-bg-solid);
+    color: var(--gfs-text);
+}
+
+/* Checkbox Inputs */
+.gfs-checkbox-group {
+    margin-bottom: 12px;
+}
+
+.gfs-checkbox-label {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    cursor: pointer;
+    padding: 8px 12px;
+    background: var(--gfs-surface);
+    border-radius: var(--gfs-radius-sm);
+    transition: var(--gfs-transition);
+}
+
+.gfs-checkbox-label:hover {
+    background: var(--gfs-surface-hover);
+}
+
+.gfs-checkbox {
+    width: 18px;
+    height: 18px;
+    border: 2px solid var(--gfs-border-bright);
+    border-radius: 4px;
+    background: var(--gfs-bg);
+    cursor: pointer;
+    -webkit-appearance: none;
+    appearance: none;
+    transition: var(--gfs-transition);
+    position: relative;
+}
+
+.gfs-checkbox:checked {
+    background: var(--gfs-primary);
+    border-color: var(--gfs-primary);
+}
+
+.gfs-checkbox:checked::after {
+    content: '';
+    position: absolute;
+    top: 2px;
+    left: 5px;
+    width: 5px;
+    height: 9px;
+    border: solid white;
+    border-width: 0 2px 2px 0;
+    transform: rotate(45deg);
+}
+
+.gfs-checkbox-label span {
+    font-size: 13px;
+    color: var(--gfs-text);
+}
+
+/* Color Inputs */
+.gfs-color-input {
+    width: 40px;
+    height: 40px;
+    border: 2px solid var(--gfs-border);
+    border-radius: var(--gfs-radius-sm);
+    background: var(--gfs-surface);
+    cursor: pointer;
+    padding: 2px;
+    transition: var(--gfs-transition);
+}
+
+.gfs-color-input:hover {
+    border-color: var(--gfs-primary);
+    transform: scale(1.05);
+}
+
+.gfs-bg-color {
+    width: 100%;
+    height: 40px;
+}
+
+.gfs-palette-colors {
+    display: flex;
+    gap: 8px;
+    margin-bottom: 12px;
+    flex-wrap: wrap;
+}
+
+/* Buttons */
+.gfs-btn {
+    padding: 10px 16px;
+    background: var(--gfs-primary);
+    border: none;
+    border-radius: var(--gfs-radius-sm);
+    color: white;
+    font-size: 12px;
+    font-weight: 600;
+    cursor: pointer;
+    transition: var(--gfs-transition);
+}
+
+.gfs-btn:hover {
+    background: var(--gfs-primary-hover);
+    transform: translateY(-1px);
+    box-shadow: 0 4px 12px var(--gfs-primary-glow);
+}
+
+.gfs-btn-small {
+    padding: 6px 12px;
+    font-size: 11px;
+}
+
+.gfs-btn-icon {
+    width: 32px;
+    height: 32px;
+    padding: 0;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background: var(--gfs-surface);
+    border-radius: 50%;
+}
+
+.gfs-btn-icon svg {
+    width: 16px;
+    height: 16px;
+    color: var(--gfs-text-muted);
+}
+
+.gfs-btn-icon:hover {
+    background: var(--gfs-surface-hover);
+}
+
+.gfs-btn-icon:hover svg {
+    color: var(--gfs-text);
+}
+
+/* Presets */
+.gfs-presets {
+    padding: 12px 16px 16px;
+    border-top: 1px solid var(--gfs-border);
+    background: var(--gfs-surface);
+}
+
+.gfs-presets .gfs-label {
+    margin-bottom: 10px;
+}
+
+.gfs-preset-buttons {
+    display: flex;
+    gap: 8px;
+    flex-wrap: wrap;
+}
+
+.gfs-preset {
+    flex: 1;
+    min-width: 80px;
+    padding: 8px 12px;
+    background: linear-gradient(135deg, var(--gfs-surface-hover), var(--gfs-surface));
+    border: 1px solid var(--gfs-border);
+    font-weight: 500;
+}
+
+.gfs-preset:hover {
+    background: linear-gradient(135deg, var(--gfs-primary), var(--gfs-primary-hover));
+    border-color: var(--gfs-primary);
+}
+
+/* Responsive */
+@media (max-width: 480px) {
+    .gfs-floating-menu {
+        right: 10px;
+        bottom: 10px;
+    }
+
+    .gfs-panel {
+        width: calc(100vw - 20px);
+        max-width: 340px;
+        right: 0;
+    }
+
+    .gfs-sections {
+        max-height: calc(100vh - 250px);
+    }
+}
+
+/* ============================================
+   SCROLL ANIMATION PANEL
+   ============================================ */
+
+/* Second Panel - Left Side */
+.gfs-scroll-panel {
+    position: fixed;
+    bottom: 20px;
+    left: 20px;
+    z-index: 999999;
+    font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+    font-size: 13px;
+    color: var(--gfs-text);
+    line-height: 1.5;
+}
+
+.gfs-scroll-panel * {
+    box-sizing: border-box;
+}
+
+.gfs-scroll-toggle {
+    position: absolute;
+    bottom: 0;
+    left: 0;
+    right: auto;
+}
+
+.gfs-scroll-panel-content {
+    position: absolute;
+    bottom: 70px;
+    left: 0;
+    right: auto;
+    width: 360px;
+}
+
+.gfs-scroll-panel.gfs-collapsed .gfs-scroll-panel-content {
+    opacity: 0;
+    transform: translateY(20px) scale(0.95);
+    pointer-events: none;
+}
+
+/* Scroll Counter Section */
+.gfs-scroll-counter-section {
+    padding: 16px;
+    background: linear-gradient(135deg, rgba(16, 185, 129, 0.1), transparent);
+    border-bottom: 1px solid var(--gfs-border);
+}
+
+.gfs-scroll-counter {
+    display: flex;
+    align-items: baseline;
+    gap: 6px;
+    margin-top: 8px;
+}
+
+.gfs-counter-value {
+    font-size: 36px;
+    font-weight: 700;
+    font-family: 'JetBrains Mono', 'Fira Code', monospace;
+    background: linear-gradient(135deg, var(--gfs-success), #34d399);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
+}
+
+.gfs-counter-unit {
+    font-size: 14px;
+    color: var(--gfs-text-muted);
+    font-weight: 500;
+}
+
+/* Enable Toggle */
+.gfs-scroll-enable {
+    padding: 12px 16px;
+    border-bottom: 1px solid var(--gfs-border);
+}
+
+/* Mappings Section */
+.gfs-mappings-section {
+    padding: 16px;
+}
+
+.gfs-mappings-header {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    margin-bottom: 12px;
+}
+
+.gfs-mappings-header .gfs-label {
+    margin-bottom: 0;
+}
+
+/* Mappings Table */
+.gfs-mappings-table-wrapper {
+    max-height: 200px;
+    overflow-y: auto;
+    scrollbar-width: thin;
+    scrollbar-color: var(--gfs-primary) var(--gfs-surface);
+}
+
+.gfs-mappings-table {
+    width: 100%;
+    border-collapse: collapse;
+    font-size: 12px;
+}
+
+.gfs-mappings-table th,
+.gfs-mappings-table td {
+    padding: 8px 10px;
+    text-align: left;
+    border-bottom: 1px solid var(--gfs-border);
+}
+
+.gfs-mappings-table th {
+    font-size: 10px;
+    font-weight: 600;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+    color: var(--gfs-text-muted);
+    background: var(--gfs-surface);
+    position: sticky;
+    top: 0;
+}
+
+.gfs-mappings-table td {
+    font-family: 'JetBrains Mono', 'Fira Code', monospace;
+}
+
+.gfs-mappings-table tr:hover td {
+    background: var(--gfs-surface);
+}
+
+.gfs-setting-badge {
+    display: inline-block;
+    padding: 2px 6px;
+    background: var(--gfs-primary);
+    color: white;
+    border-radius: 4px;
+    font-size: 10px;
+    font-weight: 600;
+    font-family: inherit;
+}
+
+.gfs-actions {
+    display: flex;
+    gap: 4px;
+    justify-content: flex-end;
+}
+
+.gfs-btn-mini {
+    width: 26px;
+    height: 26px;
+    padding: 0;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background: var(--gfs-surface);
+    border: 1px solid var(--gfs-border);
+    border-radius: 4px;
+    cursor: pointer;
+    transition: var(--gfs-transition);
+    color: var(--gfs-text-muted);
+}
+
+.gfs-btn-mini:hover {
+    background: var(--gfs-surface-hover);
+    color: var(--gfs-text);
+    border-color: var(--gfs-border-bright);
+}
+
+.gfs-delete-btn:hover {
+    background: rgba(239, 68, 68, 0.2);
+    border-color: var(--gfs-error);
+    color: var(--gfs-error);
+}
+
+/* Empty State */
+.gfs-empty-state {
+    text-align: center;
+    padding: 24px 16px;
+    color: var(--gfs-text-muted);
+}
+
+.gfs-empty-state p {
+    margin: 0 0 4px;
+    font-size: 13px;
+}
+
+.gfs-empty-state .gfs-text-muted {
+    font-size: 11px;
+}
+
+.gfs-empty-state.hidden {
+    display: none;
+}
+
+/* Mapping Form */
+.gfs-mapping-form {
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background: var(--gfs-bg);
+    z-index: 10;
+    display: flex;
+    flex-direction: column;
+    border-radius: var(--gfs-radius);
+}
+
+.gfs-mapping-form.hidden {
+    display: none;
+}
+
+.gfs-form-header {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 16px;
+    border-bottom: 1px solid var(--gfs-border);
+    background: linear-gradient(135deg, rgba(99, 102, 241, 0.1), transparent);
+    font-weight: 600;
+}
+
+.gfs-form-content {
+    flex: 1;
+    padding: 16px;
+    overflow-y: auto;
+}
+
+.gfs-form-actions {
+    display: flex;
+    gap: 10px;
+    margin-top: 16px;
+}
+
+.gfs-form-actions .gfs-btn {
+    flex: 1;
+}
+
+.gfs-btn-secondary {
+    background: var(--gfs-surface);
+    border: 1px solid var(--gfs-border);
+}
+
+.gfs-btn-secondary:hover {
+    background: var(--gfs-surface-hover);
+    border-color: var(--gfs-border-bright);
+}
+
+/* Input Styles */
+.gfs-input {
+    width: 100%;
+    padding: 10px 12px;
+    background: var(--gfs-surface);
+    border: 1px solid var(--gfs-border);
+    border-radius: var(--gfs-radius-sm);
+    color: var(--gfs-text);
+    font-size: 13px;
+    font-family: 'JetBrains Mono', 'Fira Code', monospace;
+    transition: var(--gfs-transition);
+}
+
+.gfs-input:hover {
+    border-color: var(--gfs-border-bright);
+}
+
+.gfs-input:focus {
+    outline: none;
+    border-color: var(--gfs-primary);
+    box-shadow: 0 0 0 3px var(--gfs-primary-glow);
+}
+
+.gfs-input::placeholder {
+    color: var(--gfs-text-muted);
+    opacity: 0.6;
+}
+
+/* Export Section */
+.gfs-export-section {
+    padding: 16px;
+    border-top: 1px solid var(--gfs-border);
+    background: var(--gfs-surface);
+}
+
+.gfs-export-header {
+    margin-bottom: 8px;
+}
+
+.gfs-export-description {
+    margin: 0 0 12px;
+    font-size: 11px;
+}
+
+.gfs-text-muted {
+    color: var(--gfs-text-muted);
+}
+
+.gfs-btn-export {
+    width: 100%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 8px;
+    background: linear-gradient(135deg, var(--gfs-success), #059669);
+}
+
+.gfs-btn-export:hover {
+    background: linear-gradient(135deg, #059669, #047857);
+}
+
+.gfs-btn-success {
+    background: var(--gfs-success) !important;
+}
+
+/* Export Modal */
+.gfs-export-modal {
+    position: fixed;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background: rgba(0, 0, 0, 0.7);
+    backdrop-filter: blur(4px);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    z-index: 1000000;
+}
+
+.gfs-export-modal.hidden {
+    display: none;
+}
+
+.gfs-modal-content {
+    width: 90%;
+    max-width: 600px;
+    max-height: 80vh;
+    background: var(--gfs-bg);
+    border: 1px solid var(--gfs-border);
+    border-radius: var(--gfs-radius);
+    box-shadow: var(--gfs-shadow);
+    display: flex;
+    flex-direction: column;
+    overflow: hidden;
+}
+
+.gfs-modal-header {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 16px 20px;
+    border-bottom: 1px solid var(--gfs-border);
+    background: linear-gradient(135deg, rgba(99, 102, 241, 0.1), transparent);
+}
+
+.gfs-modal-header h4 {
+    margin: 0;
+    font-size: 15px;
+    font-weight: 600;
+    background: linear-gradient(135deg, var(--gfs-text), var(--gfs-primary));
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
+}
+
+.gfs-modal-body {
+    flex: 1;
+    padding: 20px;
+    overflow-y: auto;
+}
+
+.gfs-modal-body p {
+    margin: 0 0 12px;
+    font-size: 12px;
+}
+
+.gfs-export-code {
+    width: 100%;
+    height: 300px;
+    padding: 16px;
+    background: var(--gfs-bg-solid);
+    border: 1px solid var(--gfs-border);
+    border-radius: var(--gfs-radius-sm);
+    color: var(--gfs-text);
+    font-family: 'JetBrains Mono', 'Fira Code', monospace;
+    font-size: 11px;
+    line-height: 1.6;
+    resize: none;
+}
+
+.gfs-export-code:focus {
+    outline: none;
+    border-color: var(--gfs-primary);
+}
+
+.gfs-modal-footer {
+    padding: 16px 20px;
+    border-top: 1px solid var(--gfs-border);
+    display: flex;
+    justify-content: flex-end;
+}
+
+.gfs-modal-footer .gfs-btn {
+    display: flex;
+    align-items: center;
+    gap: 6px;
+}
+
+/* Responsive adjustments for scroll panel */
+@media (max-width: 480px) {
+    .gfs-scroll-panel {
+        left: 10px;
+        bottom: 10px;
+    }
+
+    .gfs-scroll-panel-content {
+        width: calc(100vw - 20px);
+        max-width: 360px;
+    }
+
+    .gfs-modal-content {
+        width: 95%;
+        max-height: 85vh;
+    }
+
+    .gfs-export-code {
+        height: 200px;
+    }
+}
