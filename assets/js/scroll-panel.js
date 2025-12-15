@@ -370,7 +370,9 @@
                 gradientFade: 'Fade',
                 lineGradientAngle: 'Line Ang',
                 lineGradientLength: 'Line Len',
-                lineGradientWidth: 'Line W'
+                lineGradientWidth: 'Line W',
+                maxWidth: 'Max W',
+                maxHeight: 'Max H'
             };
             return names[setting] || setting;
         }

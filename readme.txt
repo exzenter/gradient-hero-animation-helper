@@ -53,6 +53,32 @@ Effects:
 Advanced:
 * Radial/Line Gradients, Gradient Blending, Fadeout Mode/Time
 
+Canvas Size Constraints:
+* maxWidth - Maximum canvas width in pixels (0 = no limit)
+* maxHeight - Maximum canvas height in pixels (0 = no limit)
+
+**Canvas Size Settings:**
+
+Limit the canvas rendering size for performance optimization. Setting a value of 0 means no limit.
+
+| Setting | Type | Default | Description |
+|---------|------|---------|-------------|
+| `maxWidth` | number | 0 | Maximum canvas width in pixels (0 = no limit) |
+| `maxHeight` | number | 0 | Maximum canvas height in pixels (0 = no limit) |
+
+```javascript
+// Limit canvas to 1920x1080 for better performance on large screens
+anim.updateSetting('maxWidth', 1920);
+anim.updateSetting('maxHeight', 1080);
+
+// Limit only height (useful for hero sections)
+anim.updateSetting('maxHeight', 800);
+
+// Remove limits
+anim.updateSetting('maxWidth', 0);
+anim.updateSetting('maxHeight', 0);
+```
+
 == How to Use Scroll Animation ==
 
 1. **Open the panel** - Click the down-arrow button on the bottom-left of the screen

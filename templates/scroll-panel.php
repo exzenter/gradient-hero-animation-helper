@@ -128,6 +128,10 @@ if (!defined('ABSPATH')) {
                             <option value="lineGradientLength">Line Length</option>
                             <option value="lineGradientWidth">Line Width</option>
                         </optgroup>
+                        <optgroup label="Canvas">
+                            <option value="maxWidth">Max Width</option>
+                            <option value="maxHeight">Max Height</option>
+                        </optgroup>
                     </select>
                 </div>
                 <div class="gfs-control-group">

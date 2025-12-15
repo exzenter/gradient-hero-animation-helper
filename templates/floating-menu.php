@@ -406,6 +406,24 @@ if (!defined('ABSPATH')) {
                         <span class="gfs-range-value">10</span>
                     </div>
                 </div>
+                
+                <div class="gfs-control-group">
+                    <label class="gfs-label">Max Width (px)</label>
+                    <div class="gfs-range-wrapper">
+                        <input type="range" class="gfs-range" data-setting="maxWidth" min="0" max="3840" step="1" value="0">
+                        <span class="gfs-range-value">0</span>
+                    </div>
+                    <span class="gfs-text-muted">0 = no limit</span>
+                </div>
+                
+                <div class="gfs-control-group">
+                    <label class="gfs-label">Max Height (px)</label>
+                    <div class="gfs-range-wrapper">
+                        <input type="range" class="gfs-range" data-setting="maxHeight" min="0" max="2160" step="1" value="0">
+                        <span class="gfs-range-value">0</span>
+                    </div>
+                    <span class="gfs-text-muted">0 = no limit</span>
+                </div>
             </div>
             
         </div>
