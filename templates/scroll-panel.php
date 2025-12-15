@@ -132,8 +132,42 @@ if (!defined('ABSPATH')) {
                             <option value="maxWidth">Max Width</option>
                             <option value="maxHeight">Max Height</option>
                         </optgroup>
+                        <optgroup label="Container CSS">
+                            <option value="container:maxWidth">Container Max Width</option>
+                            <option value="container:marginLeft">Container Margin Left</option>
+                            <option value="container:custom">Custom CSS Property</option>
+                        </optgroup>
                     </select>
                 </div>
+                
+                <!-- Container Selector (shown for container: settings) -->
+                <div class="gfs-control-group gfs-container-fields hidden" id="gfs-container-selector-group">
+                    <label class="gfs-label">Target Element Selector</label>
+                    <input type="text" class="gfs-input" id="gfs-form-container-selector" placeholder=".wp-block-hero-gradient.topblob" value=".wp-block-hero-gradient.topblob">
+                    <span class="gfs-hint">CSS selector for the element to animate</span>
+                </div>
+                
+                <!-- Custom CSS Property Name (shown for container:custom) -->
+                <div class="gfs-control-group gfs-custom-css-fields hidden" id="gfs-custom-property-group">
+                    <label class="gfs-label">CSS Property Name</label>
+                    <input type="text" class="gfs-input" id="gfs-form-css-property" placeholder="e.g., border-radius, padding, transform">
+                </div>
+                
+                <!-- Unit Selector (shown for container: settings) -->
+                <div class="gfs-control-group gfs-container-fields hidden" id="gfs-unit-group">
+                    <label class="gfs-label">Unit</label>
+                    <select class="gfs-select" id="gfs-form-unit">
+                        <option value="px">px (pixels)</option>
+                        <option value="%">% (percent)</option>
+                        <option value="em">em</option>
+                        <option value="rem">rem</option>
+                        <option value="vw">vw (viewport width)</option>
+                        <option value="vh">vh (viewport height)</option>
+                        <option value="deg">deg (degrees)</option>
+                        <option value="">none (unitless)</option>
+                    </select>
+                </div>
+                
                 <div class="gfs-control-group">
                     <label class="gfs-label">Value</label>
                     <input type="number" class="gfs-input" id="gfs-form-value" step="0.01" placeholder="e.g., 2.0">
@@ -145,6 +179,7 @@ if (!defined('ABSPATH')) {
                 </div>
             </div>
         </div>
+        
         
         <!-- Export Section -->
         <div class="gfs-export-section">

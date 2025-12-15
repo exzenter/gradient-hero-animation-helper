@@ -682,6 +682,26 @@
     font-family: inherit;
 }
 
+/* Container CSS badge - distinct orange/amber color */
+.gfs-container-badge {
+    background: linear-gradient(135deg, #f59e0b, #d97706);
+}
+
+/* Hint text for form fields */
+.gfs-hint {
+    display: block;
+    margin-top: 4px;
+    font-size: 10px;
+    color: var(--gfs-text-muted);
+    opacity: 0.7;
+}
+
+/* Hidden fields toggle */
+.gfs-container-fields.hidden,
+.gfs-custom-css-fields.hidden {
+    display: none;
+}
+
 .gfs-actions {
     display: flex;
     gap: 4px;

@@ -113,14 +113,19 @@
 
         // Apply interpolated settings to animation
         applyInterpolatedSettings(scrollY) {
-            if (!this.animation) return;
-
             // Get unique settings
             const settings = [...new Set(this.mappings.map(m => m.setting))];
 
             settings.forEach(setting => {
                 const value = this.getInterpolatedValue(scrollY, setting);
-                if (value !== null) {
+                if (value === null) return;
+
+                // Check if this is a container CSS setting
+                if (setting.startsWith('container:')) {
+                    this.applyContainerCSS(scrollY, setting, value);
+                } else {
+                    // Regular animation setting
+                    if (!this.animation) return;
                     try {
                         this.animation.updateSetting(setting, value);
                     } catch (e) {
@@ -128,6 +133,42 @@
                     }
                 }
             });
+        }
+
+        // Apply CSS to container element
+        applyContainerCSS(scrollY, setting, value) {
+            // Find all mappings for this setting to get the container selector and unit
+            const relevantMappings = this.mappings.filter(m => m.setting === setting);
+            if (relevantMappings.length === 0) return;
+
+            // Use the container selector from the first mapping (they should all be the same)
+            const containerSelector = relevantMappings[0].containerSelector || '.wp-block-hero-gradient.topblob';
+            const unit = relevantMappings[0].unit || 'px';
+
+            const element = document.querySelector(containerSelector);
+            if (!element) {
+                console.warn('[GFS Scroll] Container element not found:', containerSelector);
+                return;
+            }
+
+            // Determine the CSS property name
+            let cssProperty;
+            if (setting === 'container:maxWidth') {
+                cssProperty = 'maxWidth';
+            } else if (setting === 'container:marginLeft') {
+                cssProperty = 'marginLeft';
+            } else if (setting === 'container:custom') {
+                cssProperty = relevantMappings[0].cssProperty;
+                if (!cssProperty) return;
+                // Convert kebab-case to camelCase for JS style property
+                cssProperty = cssProperty.replace(/-([a-z])/g, (g) => g[1].toUpperCase());
+            } else {
+                return;
+            }
+
+            // Apply the style
+            const valueWithUnit = unit ? `${value}${unit}` : value;
+            element.style[cssProperty] = valueWithUnit;
         }
 
         // Bind all event listeners
@@ -167,6 +208,12 @@
             if (formCancel) formCancel.addEventListener('click', () => this.hideForm());
             if (formSave) formSave.addEventListener('click', () => this.saveMapping());
 
+            // Setting change - show/hide container fields
+            const settingSelect = document.getElementById('gfs-form-setting');
+            if (settingSelect) {
+                settingSelect.addEventListener('change', (e) => this.updateFormVisibility(e.target.value));
+            }
+
             // Export button
             const exportBtn = document.getElementById('gfs-export-btn');
             if (exportBtn) {
@@ -192,6 +239,27 @@
                     this.hideExportModal();
                 }
             });
+        }
+
+        // Update form field visibility based on selected setting
+        updateFormVisibility(setting) {
+            const containerSelectorGroup = document.getElementById('gfs-container-selector-group');
+            const customPropertyGroup = document.getElementById('gfs-custom-property-group');
+            const unitGroup = document.getElementById('gfs-unit-group');
+
+            const isContainerSetting = setting.startsWith('container:');
+            const isCustomSetting = setting === 'container:custom';
+
+            // Show/hide container fields
+            if (containerSelectorGroup) {
+                containerSelectorGroup.classList.toggle('hidden', !isContainerSetting);
+            }
+            if (unitGroup) {
+                unitGroup.classList.toggle('hidden', !isContainerSetting);
+            }
+            if (customPropertyGroup) {
+                customPropertyGroup.classList.toggle('hidden', !isCustomSetting);
+            }
         }
 
         // Toggle panel open/close
@@ -221,6 +289,9 @@
             const settingSelect = document.getElementById('gfs-form-setting');
             const valueInput = document.getElementById('gfs-form-value');
             const indexInput = document.getElementById('gfs-form-index');
+            const containerSelectorInput = document.getElementById('gfs-form-container-selector');
+            const unitSelect = document.getElementById('gfs-form-unit');
+            const cssPropertyInput = document.getElementById('gfs-form-css-property');
 
             this.editingIndex = index;
 
@@ -232,6 +303,17 @@
                 settingSelect.value = mapping.setting;
                 valueInput.value = mapping.value;
                 indexInput.value = index;
+
+                // Container fields
+                if (containerSelectorInput) {
+                    containerSelectorInput.value = mapping.containerSelector || '.wp-block-hero-gradient.topblob';
+                }
+                if (unitSelect) {
+                    unitSelect.value = mapping.unit || 'px';
+                }
+                if (cssPropertyInput) {
+                    cssPropertyInput.value = mapping.cssProperty || '';
+                }
             } else {
                 // Add mode
                 title.textContent = 'Add Keyframe';
@@ -239,7 +321,21 @@
                 settingSelect.value = 'gradientSizeMultiplier';
                 valueInput.value = '';
                 indexInput.value = -1;
+
+                // Reset container fields
+                if (containerSelectorInput) {
+                    containerSelectorInput.value = '.wp-block-hero-gradient.topblob';
+                }
+                if (unitSelect) {
+                    unitSelect.value = 'px';
+                }
+                if (cssPropertyInput) {
+                    cssPropertyInput.value = '';
+                }
             }
+
+            // Update form visibility based on current setting
+            this.updateFormVisibility(settingSelect.value);
 
             form.classList.remove('hidden');
             scrollInput.focus();
@@ -249,6 +345,9 @@
             const form = document.getElementById('gfs-mapping-form');
             form.classList.add('hidden');
             this.editingIndex = -1;
+
+            // Hide container fields
+            this.updateFormVisibility('gradientSizeMultiplier');
         }
 
         // Save mapping from form
@@ -257,6 +356,9 @@
             const settingSelect = document.getElementById('gfs-form-setting');
             const valueInput = document.getElementById('gfs-form-value');
             const indexInput = document.getElementById('gfs-form-index');
+            const containerSelectorInput = document.getElementById('gfs-form-container-selector');
+            const unitSelect = document.getElementById('gfs-form-unit');
+            const cssPropertyInput = document.getElementById('gfs-form-css-property');
 
             const scrollY = parseFloat(scrollInput.value);
             const setting = settingSelect.value;
@@ -269,6 +371,21 @@
             }
 
             const mapping = { scrollY, setting, value };
+
+            // Add container-specific fields if this is a container setting
+            if (setting.startsWith('container:')) {
+                mapping.containerSelector = containerSelectorInput?.value || '.wp-block-hero-gradient.topblob';
+                mapping.unit = unitSelect?.value || 'px';
+
+                if (setting === 'container:custom') {
+                    const cssProperty = cssPropertyInput?.value?.trim();
+                    if (!cssProperty) {
+                        alert('Please enter a CSS property name.');
+                        return;
+                    }
+                    mapping.cssProperty = cssProperty;
+                }
+            }
 
             if (index >= 0) {
                 // Update existing
@@ -306,11 +423,18 @@
 
             emptyState.classList.add('hidden');
 
-            tbody.innerHTML = this.mappings.map((mapping, index) => `
+            tbody.innerHTML = this.mappings.map((mapping, index) => {
+                // Format value with unit for container settings
+                let displayValue = mapping.value;
+                if (mapping.setting.startsWith('container:') && mapping.unit) {
+                    displayValue = `${mapping.value}${mapping.unit}`;
+                }
+
+                return `
                 <tr>
                     <td>${mapping.scrollY}</td>
-                    <td><span class="gfs-setting-badge">${this.formatSettingName(mapping.setting)}</span></td>
-                    <td>${mapping.value}</td>
+                    <td><span class="gfs-setting-badge${mapping.setting.startsWith('container:') ? ' gfs-container-badge' : ''}">${this.formatSettingName(mapping.setting, mapping)}</span></td>
+                    <td>${displayValue}</td>
                     <td class="gfs-actions">
                         <button class="gfs-btn-mini gfs-edit-btn" data-index="${index}" title="Edit">
                             <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" width="14" height="14">
@@ -326,7 +450,8 @@
                         </button>
                     </td>
                 </tr>
-            `).join('');
+            `;
+            }).join('');
 
             // Bind edit/delete buttons
             tbody.querySelectorAll('.gfs-edit-btn').forEach(btn => {
@@ -345,7 +470,7 @@
         }
 
         // Format setting name for display
-        formatSettingName(setting) {
+        formatSettingName(setting, mapping = null) {
             const names = {
                 gradientSpeed: 'Speed',
                 gradientCount: 'Count',
@@ -372,8 +497,17 @@
                 lineGradientLength: 'Line Len',
                 lineGradientWidth: 'Line W',
                 maxWidth: 'Max W',
-                maxHeight: 'Max H'
+                maxHeight: 'Max H',
+                'container:maxWidth': '📦 Max W',
+                'container:marginLeft': '📦 Margin L',
+                'container:custom': '📦 Custom'
             };
+
+            // For custom CSS, show the property name
+            if (setting === 'container:custom' && mapping?.cssProperty) {
+                return `📦 ${mapping.cssProperty}`;
+            }
+
             return names[setting] || setting;
         }
 
@@ -401,6 +535,7 @@
  * 
  * Add this script to your website to animate the gradient on scroll.
  * Requires the Hero Gradient block with animation enabled.
+ * Supports both animation settings and container CSS properties.
  */
 (function() {
     'use strict';
@@ -441,18 +576,51 @@
         return lerp(lower.value, upper.value, progress);
     }
     
+    // Apply CSS to container element
+    function applyContainerCSS(setting, value) {
+        const relevantMappings = mappings.filter(m => m.setting === setting);
+        if (relevantMappings.length === 0) return;
+        
+        const containerSelector = relevantMappings[0].containerSelector || '.wp-block-hero-gradient.topblob';
+        const unit = relevantMappings[0].unit || 'px';
+        
+        const element = document.querySelector(containerSelector);
+        if (!element) return;
+        
+        let cssProperty;
+        if (setting === 'container:maxWidth') {
+            cssProperty = 'maxWidth';
+        } else if (setting === 'container:marginLeft') {
+            cssProperty = 'marginLeft';
+        } else if (setting === 'container:custom') {
+            cssProperty = relevantMappings[0].cssProperty;
+            if (!cssProperty) return;
+            cssProperty = cssProperty.replace(/-([a-z])/g, (g) => g[1].toUpperCase());
+        } else {
+            return;
+        }
+        
+        const valueWithUnit = unit ? value + unit : value;
+        element.style[cssProperty] = valueWithUnit;
+    }
+    
     // Update animation on scroll
     function updateOnScroll() {
         const block = document.querySelector('.wp-block-hero-gradient');
-        if (!block || !block._heroGradientAnimation) return;
-        
-        const anim = block._heroGradientAnimation;
+        const anim = block?._heroGradientAnimation;
         const scrollY = window.scrollY;
         const settings = [...new Set(mappings.map(m => m.setting))];
         
         settings.forEach(setting => {
             const value = getInterpolatedValue(scrollY, setting);
-            if (value !== null) {
+            if (value === null) return;
+            
+            // Check if this is a container CSS setting
+            if (setting.startsWith('container:')) {
+                applyContainerCSS(setting, value);
+            } else {
+                // Regular animation setting
+                if (!anim) return;
                 try {
                     anim.updateSetting(setting, value);
                 } catch (e) {}
@@ -463,10 +631,14 @@
     // Wait for animation to be ready
     function init() {
         const block = document.querySelector('.wp-block-hero-gradient');
-        if (block && block._heroGradientAnimation) {
+        // Start immediately for container CSS, wait for animation for other settings
+        const hasContainerSettings = mappings.some(m => m.setting.startsWith('container:'));
+        const hasAnimationSettings = mappings.some(m => !m.setting.startsWith('container:'));
+        
+        if (hasContainerSettings || (block && block._heroGradientAnimation)) {
             window.addEventListener('scroll', updateOnScroll, { passive: true });
             updateOnScroll();
-        } else {
+        } else if (hasAnimationSettings) {
             setTimeout(init, 500);
         }
     }
